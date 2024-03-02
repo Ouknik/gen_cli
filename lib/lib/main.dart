@@ -1,9 +1,9 @@
-import 'package:farah_admin/app/lang/transation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:get/get.dart';
-
+import 'app/constants/color.dart';
+import 'app/lang/transation.dart';
 import 'app/routes/app_pages.dart';
 
 Future<void> main() async {
@@ -16,9 +16,20 @@ Future<void> main() async {
       builder: (_, child) => GetMaterialApp(
         debugShowCheckedModeBanner: false,
         // locale: controller.initializeLocale(),
+
+        theme: ThemeData(
+          appBarTheme: const AppBarTheme(
+            elevation: 0,
+            color: AppColors.primaryColor,
+            systemOverlayStyle: SystemUiOverlayStyle(
+              statusBarColor: Colors.transparent,
+            ),
+          ),
+        ),
+
         translations: Translation(),
         title: "Application",
-        initialRoute: Routes.DASHBOARD,
+        initialRoute: AppPages.INITIAL,
         getPages: AppPages.routes,
       ),
     ),

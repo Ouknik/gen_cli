@@ -1,0 +1,18 @@
+name: gen_cli
+version: 1.8.2
+homepage: https://github.com/jonataslaw/get_cli
+description: Official CLI for GetX™ framework to build Flutter and Server
+  Applications easily
+environment:
+  sdk: ">=2.19.0 <4.0.0"
+
+dependencies:
+  yaml: ^3.1.0  
+
+dev_dependencies:
+  lints: ^2.0.0
+  test: ^1.5.0
+
+executables:
+  get: get
+  getx: get

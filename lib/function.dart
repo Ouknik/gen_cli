@@ -21,7 +21,13 @@ String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
 
 void getAllLibrary({required String projectPath}) {
   // List of libraries to add
-  List<String> libraries = ["get", "cached_network_image", "shimmer"];
+  List<String> libraries = [
+    "get",
+    "cached_network_image",
+    "shimmer",
+    "flutter_screenutil",
+    "http"
+  ];
 
   print("..library..");
   // Execute 'flutter pub add' command for each library

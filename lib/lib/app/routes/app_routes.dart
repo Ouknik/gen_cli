@@ -4,15 +4,14 @@ abstract class Routes {
   Routes._();
   static const HOME = _Paths.HOME;
   static const ROOT = _Paths.ROOT;
-
-  static const PAGE:DART22 = _Paths.PAGE:DART22 
-/*Routes*/}
-
+  static const SPALSH_SCREEN = _Paths.SPALSH_SCREEN;
+/*Routes*/
 }
 
 abstract class _Paths {
   _Paths._();
   static const HOME = '/home';
   static const ROOT = '/root';
+  static const SPALSH_SCREEN = '/spalsh-screen';
   /*_Paths*/
 }

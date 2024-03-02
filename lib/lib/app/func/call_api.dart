@@ -1,126 +1,62 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
-
+import 'package:get/get_connect/connect.dart';
 import 'package:http/http.dart' as http;
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 import '../config/confige.dart';
 import '../config/statues.dart';
-import '../routes/app_pages.dart';
 
 class CallApi extends GetConnect {
-  callApiStreamWithOtt(
-      String url, String method, Map<String, String> jsonData) async {
+  // Check for internet connection and if we can reach an external endpoint
+  Future<bool> checkInternet(String url) async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+
+    if (connectivityResult == ConnectivityResult.none) {
+      return false;
+    }
+
     try {
-      // Construct the complete URL
-      String completeUrl = Confige().baseUrl + '/1/1' + url;
-
-      // Create the multipart request
-      var request = http.MultipartRequest(method, Uri.parse(completeUrl));
-
-      // Add JSON data as fields to the request
-      request.fields.addAll(jsonData);
-
-      // Send the request and get the streamed response
-      http.StreamedResponse response = await request.send();
-
-      // Check the response status code
+      var response = await http.head(Uri.parse(Confige().baseUrl + url));
       if (response.statusCode == 200) {
-        // Convert the response stream to a string
-        var res = await response.stream.bytesToString();
-
-        // You can process response JSON here if needed
-        // Example: json.decode(res)["_nxtapott"];
-
-        return res;
+        return true;
       } else {
-        // Handle different status codes appropriately
-        print("Error: ${response.statusCode}");
-        return null; // You might want to return an appropriate value here
+        return false;
       }
     } catch (e) {
-      // Handle any exceptions that occur during the process
-      print("Exception: $e");
-      return null; // You might want to return an appropriate value here
+      return false;
     }
   }
 
-  callApiStreamWithoutOtt(
-      url, String statue, Map<String, String> jsondate) async {
-    var request = await http.MultipartRequest(
-        statue, Uri.parse('${Confige().baseUrl}' + url));
-    request.fields.addAll(jsondate);
+  // POST function with internet check
+  Future<String?> POST(String url, Map<String, String> jsonDate) async {
+    if (await checkInternet(url)) {
+      var request = await http.MultipartRequest(
+          "POST", Uri.parse(Confige().baseUrl + url));
 
-    http.StreamedResponse response = await request.send();
+      request.fields.addAll(jsonDate);
 
-    var res = await response.stream.bytesToString();
-    print('${Confige().baseUrl}' + url);
-    print(res);
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-      try {
-        return res;
-      } catch (e) {
+      http.StreamedResponse response = await request.send();
+
+      if (response.statusCode == 200) {
+        var res = await response.stream.bytesToString();
         return res;
       }
-    } else if (response.statusCode == 504) {}
-  }
-
-  callApiWithoutOtt(url, String statue, Map<String, dynamic> jsondate) async {
-    if (statue == Statue().post) {
-      var response = await post('${Confige().baseUrl}' + url, jsondate);
-      print('${Confige().baseUrl}' + url);
-      print(response.body);
-
-      if (response.statusCode == 200) {
-        try {
-          return response;
-        } catch (e) {
-          return response;
-        }
-      } else if (response.statusCode == 504) {}
     } else {
-      var response = await get('${Confige().baseUrl}' + url);
-
-      print(response.body);
-      print(response.statusCode);
-      if (response.statusCode == 200) {
-        try {
-          return response;
-        } catch (e) {
-          return response;
-        }
-      } else if (response.statusCode == 504) {}
+      return Statue().ProblemInternet;
     }
   }
 
-  callApiWithOtt(url, String statue, Map<String, dynamic> jsondate) async {
-    print('${Confige().baseUrl}/1/1' + url);
+  // GET function with internet check
+  Future<String?> GET(String url) async {
+    if (await checkInternet(url)) {
+      var response = await get(Confige().baseUrl + url);
 
-    if (statue == Statue().post) {
-      var response = await post('${Confige().baseUrl}/1/1' + url, jsondate);
-
-      if (response!.statusCode == 200) {
-        try {
-          return response;
-        } catch (e) {
-          return response;
-        }
-      } else if (response.statusCode == 504) {
-        //   Get.offAllNamed(Routes.SERVER_HAS_PROBLEM);
-      } else {}
+      if (response.statusCode == 200) {
+        return response.bodyString;
+      }
     } else {
-      var response = await get(
-        '${Confige().baseUrl}/1/1' + url,
-      );
-      print(response.body);
-      if (response!.statusCode == 200) {
-        try {
-          return response;
-        } catch (e) {
-          return response;
-        }
-      } else if (response.statusCode == 504) {}
+      return Statue().ProblemInternet;
     }
   }
 }

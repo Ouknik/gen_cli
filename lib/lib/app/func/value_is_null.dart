@@ -3,12 +3,5 @@ String ValueIsNull(String value) {
     return "";
   }
 
-  if (value == "%!s(<nil>") {
-    return "";
-  }
-
-  if (value == "%!s(\u003cnil\u003e)") {
-    return "";
-  }
   return value;
 }

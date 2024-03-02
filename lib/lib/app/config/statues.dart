@@ -1,4 +1,3 @@
 class Statue {
-  final get = "GET";
-  final post = "POST";
+  final ProblemInternet = "not Internet";
 }
