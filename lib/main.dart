@@ -1,5 +1,4 @@
-import 'package:get_cli/function.dart';
-
+import 'function.dart';
 import 'create/project.dart';
 import 'create/page.dart';
 import 'create/view.dart';
