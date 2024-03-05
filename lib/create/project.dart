@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import '../function.dart';
+
 String CreateProject() {
   String projectPath = Directory.current.path;
   String scriptPath = File(Platform.script.toFilePath()).parent.path;
@@ -27,12 +29,35 @@ String CreateProject() {
     // Copy the existing lib folder to the newly created project
     Directory existingLibDir = Directory('$scriptPath/lib');
 
+    String existingPubspeDir = '$projectPath/$projectName/pubspec.yaml';
+
     Directory newLibDir = Directory('$projectPath/$projectName/lib');
     if (existingLibDir.existsSync()) {
       copyDirectory(existingLibDir, newLibDir);
     } else {
       print('Existing lib folder not found');
     }
+
+    String PubspecYamlContent = File(existingPubspeDir).readAsStringSync();
+
+    print("----------------------------------");
+    print(PubspecYamlContent);
+
+    PubspecYamlContent = removeComments(PubspecYamlContent);
+
+    PubspecYamlContent =
+        PubspecYamlContent.replaceFirst('  uses-material-design: true', '''
+  uses-material-design: true
+
+  assets:
+    - lib/assets/images/
+    - lib/assets/icons/
+ 
+
+''');
+
+    createFile(existingPubspeDir, PubspecYamlContent);
+    print("----------------------------------");
 
     print('New project created with package name: $packageName');
   } else {

@@ -38,3 +38,20 @@ void getAllLibrary({required String projectPath}) {
   });
   print(".........");
 }
+
+String removeComments(String code) {
+  // Define a regular expression pattern to match lines starting with "#"
+  RegExp commentPattern = RegExp(r'^\s*#.*$', multiLine: true);
+
+  // Remove lines that match the pattern
+  String cleanedCode = code.replaceAll(commentPattern, '');
+
+  // Remove extra spaces and blank lines between non-comment lines
+  cleanedCode = cleanedCode
+      .split('\n')
+      .where((line) => line.trim().isNotEmpty)
+      .join('\n')
+      .trim();
+
+  return cleanedCode;
+}
