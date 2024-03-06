@@ -26,7 +26,8 @@ void getAllLibrary({required String projectPath}) {
     "cached_network_image",
     "shimmer",
     "flutter_screenutil",
-    "http"
+    "http",
+    "flutter_launcher_icons"
   ];
 
   print("..library..");

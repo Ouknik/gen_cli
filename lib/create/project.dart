@@ -40,9 +40,6 @@ String CreateProject() {
 
     String PubspecYamlContent = File(existingPubspeDir).readAsStringSync();
 
-    print("----------------------------------");
-    print(PubspecYamlContent);
-
     PubspecYamlContent = removeComments(PubspecYamlContent);
 
     PubspecYamlContent =
@@ -56,8 +53,30 @@ String CreateProject() {
 
 ''');
 
+    PubspecYamlContent =
+        PubspecYamlContent.replaceFirst('  flutter_lints: ^2.0.0', '''
+  flutter_lints: ^2.0.0
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "lib/assets/images/logo.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "lib/assets/images/logo.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  windows:
+    generate: true
+    image_path: "lib/assets/images/logo.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "lib/assets/images/logo.png"
+flutter: 
+''');
+
     createFile(existingPubspeDir, PubspecYamlContent);
-    print("----------------------------------");
 
     print('New project created with package name: $packageName');
   } else {
