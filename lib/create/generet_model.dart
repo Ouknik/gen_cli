@@ -1,6 +1,10 @@
 class ModelGenerator {
-  static dynamic generateModelFromJson(Map<String, dynamic> json, String modelName) {
-    if (json == null || json.isEmpty || modelName == null || modelName.isEmpty) {
+  static dynamic generateModelFromJson(
+      Map<String, dynamic> json, String modelName) {
+    if (json == null ||
+        json.isEmpty ||
+        modelName == null ||
+        modelName.isEmpty) {
       return null;
     }
 
@@ -8,15 +12,18 @@ class ModelGenerator {
     StringBuffer modelClass = StringBuffer('class $modelName {\n');
 
     // Loop through the keys of the JSON object
-    Map<String, String> nestedModels = {}; // Store nested models to be defined later
-    Map<String, dynamic> modelFromJsonMap = {}; // Store modelFromJson method parameters
+    Map<String, String> nestedModels =
+        {}; // Store nested models to be defined later
+    Map<String, dynamic> modelFromJsonMap =
+        {}; // Store modelFromJson method parameters
     Map<String, dynamic> toJsonMap = {}; // Store toJson method parameters
     json.forEach((key, value) {
       // Check the type of the value
       if (value is Map<String, dynamic>) {
         // If it's a nested object, recursively generate the model for it
         String nestedModelName = '${_capitalize(key)}';
-        String nestedModelString = generateModelFromJson(value, nestedModelName);
+        String nestedModelString =
+            generateModelFromJson(value, nestedModelName);
 
         // Add the nested model to the class string
         nestedModels[nestedModelName] = nestedModelString;
@@ -30,14 +37,16 @@ class ModelGenerator {
         if (value.isNotEmpty && value.first is Map<String, dynamic>) {
           // If the list contains nested objects, generate models for each item
           String listModelName = '${_capitalize(key)}Item';
-          String listModelString = generateModelFromJson(value.first, listModelName);
+          String listModelString =
+              generateModelFromJson(value.first, listModelName);
 
           // Add the nested list model to the class string
           nestedModels[listModelName] = listModelString;
 
           // Add the field to the main model class
           modelClass.writeln('  List<$listModelName> $key;');
-          modelFromJsonMap[key] = 'List<dynamic>.from(json[\'$key\'].map((x) => $listModelName.fromJson(x)))';
+          modelFromJsonMap[key] =
+              'List<dynamic>.from(json[\'$key\'].map((x) => $listModelName.fromJson(x)))';
           toJsonMap[key] = 'List<dynamic>.from($key.map((x) => x.toJson()))';
         } else {
           // Otherwise, keep the list as is
@@ -132,15 +141,16 @@ class ModelGenerator {
   }
 }
 
-// Example usage:
-void main() {
+void CreateModel(List<String> arguments) {
   Map<String, dynamic> jsonData = {
     "name": "John Doe",
     "age": 30,
     "height": 6.0,
     "isMarried": false,
-    
-    "address": [{"city": "New York", "zipcode": 12345},{"city": "New York", "zipcode": 12345}]
+    "address": [
+      {"city": "New York", "zipcode": 12345},
+      {"city": "New York", "zipcode": 12345}
+    ]
   };
 
   String modelName = 'Person'; // You can specify any model name here

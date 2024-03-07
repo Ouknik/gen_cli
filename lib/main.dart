@@ -1,3 +1,4 @@
+import 'create/generet_model.dart';
 import 'function.dart';
 import 'create/project.dart';
 import 'create/page.dart';
@@ -43,6 +44,10 @@ void main(List<String> arguments) {
 
     case 'controller':
       CreateController(arguments);
+      break;
+
+    case 'model':
+      CreateModel(arguments);
       break;
 
     default:
