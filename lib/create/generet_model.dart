@@ -1,115 +1,253 @@
-import 'dart:convert';
-import 'dart:io';
-
-void main() {
-  String projectPath = Directory.current.path;
-  final jsonString = '''
-    {
-        "name": "John Doe",
-        "age": 30,
-        "height": 6.0,
-        "isMarried": false,
-        "friends": ["Alice", "Bob", "Charlie"],
-        "address": {"city": "New York", "zipcode": 12345}
+class ModelGenerator {
+  static dynamic generateModelFromJson(Map<String, dynamic> json, String modelName) {
+    if (json == null || json.isEmpty || modelName == null || modelName.isEmpty) {
+      return null;
     }
-  ''';
 
-  final resultByRadarModel =
-      generateModelFromJson('ResultByRadarModel', jsonString);
+    // Start building the model class string
+    StringBuffer modelClass = StringBuffer('class $modelName {\n');
 
-  createFile(
-      '$projectPath//lib/app/model/person_model.dart', resultByRadarModel);
+    // Loop through the keys of the JSON object
+    Map<String, String> nestedModels = {}; // Store nested models to be defined later
+    Map<String, dynamic> modelFromJsonMap = {}; // Store modelFromJson method parameters
+    Map<String, dynamic> toJsonMap = {}; // Store toJson method parameters
+    json.forEach((key, value) {
+      // Check the type of the value
+      if (value is Map<String, dynamic>) {
+        // If it's a nested object, recursively generate the model for it
+        String nestedModelName = '${_capitalize(key)}';
+        String nestedModelString = generateModelFromJson(value, nestedModelName);
 
-  print(resultByRadarModel);
-}
+        // Add the nested model to the class string
+        nestedModels[nestedModelName] = nestedModelString;
 
-String generateModelFromJson(String className, String jsonString) {
-  final dynamic json = jsonDecode(jsonString);
-  final StringBuffer buffer = StringBuffer();
+        // Add the field to the main model class
+        modelClass.writeln('  $nestedModelName $key;');
+        modelFromJsonMap[key] = '$nestedModelName.fromJson(json[\'$key\'])';
+        toJsonMap[key] = '$key.toJson()';
+      } else if (value is List<dynamic>) {
+        // If it's a list, check if it contains nested objects
+        if (value.isNotEmpty && value.first is Map<String, dynamic>) {
+          // If the list contains nested objects, generate models for each item
+          String listModelName = '${_capitalize(key)}Item';
+          String listModelString = generateModelFromJson(value.first, listModelName);
 
-  buffer.writeln(
-      '// To parse this JSON data, do\n//\n//     final resultByRadarModel = resultByRadarModelFromJson(jsonString);\n\nimport \'dart:convert\';\n\n${generateClassFromJson(className, json)}');
+          // Add the nested list model to the class string
+          nestedModels[listModelName] = listModelString;
 
-  return buffer.toString();
-}
-
-String generateClassFromJson(String className, dynamic json) {
-  final StringBuffer buffer = StringBuffer();
-
-  buffer.writeln('class $className {');
-  buffer.writeln(generateFieldsFromJson(json));
-  buffer.writeln(generateConstructorFromJson(className, json));
-  buffer.writeln(generateFromJson(className, json));
-  buffer.writeln('}');
-
-  return buffer.toString();
-}
-
-String generateFieldsFromJson(dynamic json) {
-  final StringBuffer buffer = StringBuffer();
-
-  json.forEach((key, value) {
-    if (value is bool) {
-      buffer.writeln('  final bool $key;');
-    } else if (value is String) {
-      buffer.writeln('  final String $key;');
-    } else if (value is num) {
-      if (value is int) {
-        buffer.writeln('  final int $key;');
-      } else if (value is double) {
-        buffer.writeln('  final double $key;');
+          // Add the field to the main model class
+          modelClass.writeln('  List<$listModelName> $key;');
+          modelFromJsonMap[key] = 'List<dynamic>.from(json[\'$key\'].map((x) => $listModelName.fromJson(x)))';
+          toJsonMap[key] = 'List<dynamic>.from($key.map((x) => x.toJson()))';
+        } else {
+          // Otherwise, keep the list as is
+          String listType = _getListType(value);
+          modelClass.writeln('  List<$listType> $key;');
+          modelFromJsonMap[key] = _getListParsingLogic(listType, key);
+          toJsonMap[key] = '$key';
+        }
+      } else {
+        // Otherwise, keep the value as is
+        modelClass.writeln('  ${_getType(value)} $key;');
+        modelFromJsonMap[key] = 'json[\'$key\']';
+        toJsonMap[key] = '$key';
       }
-    } else if (value is List) {
-      if (value.isNotEmpty && value.first is String) {
-        buffer.writeln('  final List<String> $key;');
-      }
-    } else if (value is Map) {
-      final typeName = key[0].toUpperCase() + key.substring(1);
-      buffer.writeln('  final $typeName $key;');
-    }
-  });
+    });
 
-  return buffer.toString();
-}
+    // Close the class string
+    modelClass.writeln();
 
-String generateConstructorFromJson(String className, dynamic json) {
-  final StringBuffer buffer = StringBuffer();
+    // Generate fromJson method
+    modelClass.writeln('  $modelName.fromJson(Map<String, dynamic> json) {');
+    modelFromJsonMap.forEach((key, value) {
+      modelClass.writeln('    $key = $value;');
+    });
+    modelClass.writeln('  }\n');
 
-  buffer.writeln('\n  $className({');
-  json.forEach((key, value) {
-    buffer.writeln('    this.$key,');
-  });
-  buffer.writeln('  });');
+    // Generate toJson method
+    modelClass.writeln('  Map<String, dynamic> toJson() => {');
+    toJsonMap.forEach((key, value) {
+      modelClass.writeln('    \'$key\': $value,');
+    });
+    modelClass.writeln('  };');
 
-  return buffer.toString();
-}
+    // Close the class string
+    modelClass.writeln('}\n');
 
-String generateFromJson(String className, dynamic json) {
-  final StringBuffer buffer = StringBuffer();
+    // Add nested models to the final class string
+    nestedModels.forEach((name, definition) {
+      modelClass.write(definition);
+    });
 
-  buffer
-      .writeln('\n  factory $className.fromJson(Map<String, dynamic> json) {');
-  buffer.writeln('    return $className(');
-  json.forEach((key, value) {
-    if (value is List) {
-      if (value.isNotEmpty && value.first is String) {
-        buffer.writeln('      $key: List<String>.from(json[\'$key\']),');
-      }
-    } else if (value is Map) {
-      final typeName = key[0].toUpperCase() + key.substring(1);
-      buffer.writeln('      $key: $typeName.fromJson(json[\'$key\']),');
+    // Return the generated model class string
+    return modelClass.toString();
+  }
+
+  // Helper function to capitalize the first letter of a string
+  static String _capitalize(String s) => s[0].toUpperCase() + s.substring(1);
+
+  // Helper function to get the type name from a value
+  static String _getType(dynamic value) {
+    if (value is String) {
+      return 'String';
+    } else if (value is int) {
+      return 'int';
+    } else if (value is double) {
+      return 'double';
+    } else if (value is bool) {
+      return 'bool';
     } else {
-      buffer.writeln('      $key: json[\'$key\'],');
+      return 'dynamic';
     }
-  });
-  buffer.writeln('    );');
-  buffer.writeln('  }');
+  }
 
-  return buffer.toString();
+  // Helper function to get the list type
+  static String _getListType(List<dynamic> list) {
+    // Check the type of the first element in the list
+    dynamic firstElement = list.first;
+    if (firstElement is String) {
+      return 'String';
+    } else if (firstElement is int) {
+      return 'int';
+    } else if (firstElement is double) {
+      return 'double';
+    } else if (firstElement is Map<String, dynamic>) {
+      return '${_capitalize(list[0].keys.first)}Item';
+    } else {
+      return 'dynamic';
+    }
+  }
+
+  // Helper function to get the parsing logic for list elements
+  static String _getListParsingLogic(String listType, String key) {
+    if (listType == 'String') {
+      return 'List<String>.from(json[\'$key\'].map((x) => x.toString()))';
+    } else if (listType == 'int') {
+      return 'List<int>.from(json[\'$key\'].map((x) => x.toInt()))';
+    } else if (listType == 'double') {
+      return 'List<double>.from(json[\'$key\'].map((x) => x.toDouble()))';
+    } else {
+      return 'List<dynamic>.from(json[\'$key\'].map((x) => ${_capitalize(listType)}.fromJson(x)))';
+    }
+  }
 }
 
-void createFile(String path, String content) {
-  File file = File(path);
-  file.createSync(recursive: true);
-  file.writeAsStringSync(content);
-}s
+// Example usage:
+void main() {
+  Map<String, dynamic> jsonData = {
+    "name": "John Doe",
+    "age": 30,
+    "height": 6.0,
+    "isMarried": false,
+    
+    "address": [{"city": "New York", "zipcode": 12345},{"city": "New York", "zipcode": 12345}]
+  };
+
+  String modelName = 'Person'; // You can specify any model name here
+
+  // Generate model from JSON
+  var model = ModelGenerator.generateModelFromJson(jsonData, modelName);
+
+  print(model);
+}
+
+
+
+
+/*class ModelGenerator {
+  static dynamic generateModelFromJson(
+      Map<String, dynamic> json, String modelName) {
+    if (json == null ||
+        json.isEmpty ||
+        modelName == null ||
+        modelName.isEmpty) {
+      return null;
+    }
+
+    // Start building the model class string
+    StringBuffer modelClass = StringBuffer('class $modelName {\n');
+
+    // Loop through the keys of the JSON object
+    json.forEach((key, value) {
+      // Check the type of the value
+      if (value is Map<String, dynamic>) {
+        // If it's a nested object, recursively generate the model for it
+        String nestedModelName = '${_capitalize(key)}';
+        String nestedModelString =
+            generateModelFromJson(value, nestedModelName);
+
+        // Add the nested model to the class string
+        modelClass.writeln(nestedModelString);
+
+        // Add the field to the main model class
+        modelClass.writeln('  $nestedModelName $key;');
+      } else if (value is List<dynamic>) {
+        // If it's a list, check if it contains nested objects
+        if (value.isNotEmpty && value.first is Map<String, dynamic>) {
+          // If the list contains nested objects, generate models for each item
+          String listModelName = '${_capitalize(key)}Item';
+          String listModelString =
+              generateModelFromJson(value.first, listModelName);
+
+          // Add the nested list model to the class string
+          modelClass.writeln(listModelString);
+
+          // Add the field to the main model class
+          modelClass.writeln('  List<$listModelName> $key;');
+        } else {
+          // Otherwise, keep the list as is
+          modelClass.writeln('  List<dynamic> $key;');
+        }
+      } else {
+        // Otherwise, keep the value as is
+        modelClass.writeln('  ${_getType(value)} $key;');
+      }
+    });
+
+    // Close the class string
+    modelClass.writeln('}');
+
+    // Return the generated model class string
+    return modelClass.toString();
+  }
+
+  // Helper function to capitalize the first letter of a string
+  static String _capitalize(String s) => s[0].toUpperCase() + s.substring(1);
+
+  // Helper function to get the type name from a value
+  static String _getType(dynamic value) {
+    if (value is String) {
+      return 'String';
+    } else if (value is int) {
+      return 'int';
+    } else if (value is double) {
+      return 'double';
+    } else if (value is bool) {
+      return 'bool';
+    } else {
+      return 'dynamic';
+    }
+  }
+}
+
+// Example usage:
+void main() {
+  Map<String, dynamic> jsonData = {
+    "name": "John Doe",
+    "age": 30,
+    "height": 6.0,
+    "isMarried": false,
+    "friends": ["Alice", "Bob", "Charlie"],
+    "address": {"city": "New York", "zipcode": 12345}
+  };
+
+  String modelName = 'Person'; // You can specify any model name here
+
+  // Generate model from JSON
+  var model = ModelGenerator.generateModelFromJson(jsonData, modelName);
+
+  print(model);
+}*/
+
+
+
