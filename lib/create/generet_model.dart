@@ -1,4 +1,32 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
 class ModelGenerator {
+  static Future<dynamic> generateModelFromUrl(
+      String url, String modelName) async {
+    try {
+      // Make a GET request to the URL
+      http.Response response = await http.get(Uri.parse(url));
+
+      // Check if the request was successful (status code 200)
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // Decode the response body
+        dynamic jsonData = json.decode(response.body);
+        print(jsonData);
+        // Generate the model from JSON
+        return generateModelFromJson(jsonData, modelName);
+      } else {
+        // Request failed, return null
+        print('Failed to fetch data: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      // An error occurred, return null
+      print('Error fetching data: $e');
+      return null;
+    }
+  }
+
   static dynamic generateModelFromJson(
       Map<String, dynamic> json, String modelName) {
     if (json == null ||
@@ -141,7 +169,7 @@ class ModelGenerator {
   }
 }
 
-void CreateModel(List<String> arguments) {
+Future<void> CreateModel(List<String> arguments) async {
   Map<String, dynamic> jsonData = {
     "name": "John Doe",
     "age": 30,
@@ -156,8 +184,12 @@ void CreateModel(List<String> arguments) {
   String modelName = 'Person'; // You can specify any model name here
 
   // Generate model from JSON
-  var model = ModelGenerator.generateModelFromJson(jsonData, modelName);
+  //var model = ModelGenerator.generateModelFromJson(jsonData, modelName);
 
+  var model = await ModelGenerator.generateModelFromUrl(
+      "https://api.github.com/users/CpdnCristiano", modelName);
+
+  print("aa");
   print(model);
 }
 
