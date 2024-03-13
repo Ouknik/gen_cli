@@ -1,5 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'dart:io';
+
+import '../function.dart';
 
 class ModelGenerator {
   static Future<dynamic> generateModelFromUrl(
@@ -27,6 +30,25 @@ class ModelGenerator {
     }
   }
 
+  static Future<dynamic> generateModelFromFile(
+      String filePath, String modelName) async {
+    try {
+      // Read the JSON file
+      File file = File(filePath);
+      String contents = await file.readAsString();
+
+      // Decode the JSON data
+      dynamic jsonData = json.decode(contents);
+
+      // Generate the model from JSON
+      return generateModelFromJson(jsonData, modelName);
+    } catch (e) {
+      // An error occurred, return null
+      print('Error reading file: $e');
+      return null;
+    }
+  }
+
   static dynamic generateModelFromJson(
       Map<String, dynamic> json, String modelName) {
     if (json == null ||
@@ -37,7 +59,8 @@ class ModelGenerator {
     }
 
     // Start building the model class string
-    StringBuffer modelClass = StringBuffer('class $modelName {\n');
+    StringBuffer modelClass =
+        StringBuffer('class ${capitalize(modelName)} {\n');
 
     // Loop through the keys of the JSON object
     Map<String, String> nestedModels =
@@ -170,126 +193,22 @@ class ModelGenerator {
 }
 
 Future<void> CreateModel(List<String> arguments) async {
-  Map<String, dynamic> jsonData = {
-    "name": "John Doe",
-    "age": 30,
-    "height": 6.0,
-    "isMarried": false,
-    "address": [
-      {"city": "New York", "zipcode": 12345},
-      {"city": "New York", "zipcode": 12345}
-    ]
-  };
+  String projectPath = Directory.current.path;
+  String argument = arguments[1];
+  String typeCommande = argument.split("=")[0];
+  String url = argument.split("=")[1];
 
-  String modelName = 'Person'; // You can specify any model name here
+  stdout.write('Enter model name: ');
+  String? modelName = stdin.readLineSync();
 
-  // Generate model from JSON
-  //var model = ModelGenerator.generateModelFromJson(jsonData, modelName);
+  if (typeCommande == "url") {
+    var model = await ModelGenerator.generateModelFromUrl(url, modelName!);
 
-  var model = await ModelGenerator.generateModelFromUrl(
-      "https://api.github.com/users/CpdnCristiano", modelName);
+    createFile('$projectPath/lib/app/model/$modelName.dart', model);
+  } else if (typeCommande == "file") {
+    var model = await ModelGenerator.generateModelFromFile(
+        projectPath + "/lib/app/data/" + url, modelName!);
 
-  print("aa");
-  print(model);
-}
-
-
-
-
-/*class ModelGenerator {
-  static dynamic generateModelFromJson(
-      Map<String, dynamic> json, String modelName) {
-    if (json == null ||
-        json.isEmpty ||
-        modelName == null ||
-        modelName.isEmpty) {
-      return null;
-    }
-
-    // Start building the model class string
-    StringBuffer modelClass = StringBuffer('class $modelName {\n');
-
-    // Loop through the keys of the JSON object
-    json.forEach((key, value) {
-      // Check the type of the value
-      if (value is Map<String, dynamic>) {
-        // If it's a nested object, recursively generate the model for it
-        String nestedModelName = '${_capitalize(key)}';
-        String nestedModelString =
-            generateModelFromJson(value, nestedModelName);
-
-        // Add the nested model to the class string
-        modelClass.writeln(nestedModelString);
-
-        // Add the field to the main model class
-        modelClass.writeln('  $nestedModelName $key;');
-      } else if (value is List<dynamic>) {
-        // If it's a list, check if it contains nested objects
-        if (value.isNotEmpty && value.first is Map<String, dynamic>) {
-          // If the list contains nested objects, generate models for each item
-          String listModelName = '${_capitalize(key)}Item';
-          String listModelString =
-              generateModelFromJson(value.first, listModelName);
-
-          // Add the nested list model to the class string
-          modelClass.writeln(listModelString);
-
-          // Add the field to the main model class
-          modelClass.writeln('  List<$listModelName> $key;');
-        } else {
-          // Otherwise, keep the list as is
-          modelClass.writeln('  List<dynamic> $key;');
-        }
-      } else {
-        // Otherwise, keep the value as is
-        modelClass.writeln('  ${_getType(value)} $key;');
-      }
-    });
-
-    // Close the class string
-    modelClass.writeln('}');
-
-    // Return the generated model class string
-    return modelClass.toString();
-  }
-
-  // Helper function to capitalize the first letter of a string
-  static String _capitalize(String s) => s[0].toUpperCase() + s.substring(1);
-
-  // Helper function to get the type name from a value
-  static String _getType(dynamic value) {
-    if (value is String) {
-      return 'String';
-    } else if (value is int) {
-      return 'int';
-    } else if (value is double) {
-      return 'double';
-    } else if (value is bool) {
-      return 'bool';
-    } else {
-      return 'dynamic';
-    }
+    createFile('$projectPath/lib/app/model/$modelName.dart', model);
   }
 }
-
-// Example usage:
-void main() {
-  Map<String, dynamic> jsonData = {
-    "name": "John Doe",
-    "age": 30,
-    "height": 6.0,
-    "isMarried": false,
-    "friends": ["Alice", "Bob", "Charlie"],
-    "address": {"city": "New York", "zipcode": 12345}
-  };
-
-  String modelName = 'Person'; // You can specify any model name here
-
-  // Generate model from JSON
-  var model = ModelGenerator.generateModelFromJson(jsonData, modelName);
-
-  print(model);
-}*/
-
-
-
