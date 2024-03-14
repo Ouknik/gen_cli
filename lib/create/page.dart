@@ -10,7 +10,7 @@ void CreatePage(List<String> arguments) {
   String projectPath = Directory.current.path;
 
   if (arguments.length < 1) {
-    print('Usage: dart create_page.dart <page_name>');
+    print('Usage:gen page <page_name>');
     return;
   }
 
