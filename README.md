@@ -26,7 +26,7 @@ Gen_CLI is a command-line interface (CLI) tool for building Flutter and server a
 4. Add an alias for the `gen` command by appending the following line at the end of the file.
 
     ```bash
-    alias gen='dart path_to_gen_cli/gen_cli/main.dart'
+    alias gen='dart path_to_gen_cli/main.dart'
     ```
 
    Replace `path_to_gen_cli` with the actual path to the `gen_cli` directory on your system.
