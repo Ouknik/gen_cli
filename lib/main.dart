@@ -7,11 +7,10 @@ import 'create/controller.dart';
 
 void main(List<String> arguments) {
   if (arguments.isEmpty) {
-    print('Usage: dart main.dart <command>');
+    print('Usage:gen <command>');
     return;
   }
 
-  // Split the command by ':' to extract page name if provided
   List<String> commandParts = arguments[0].split(':');
   String command = commandParts[0];
   String? pageName;
@@ -22,7 +21,6 @@ void main(List<String> arguments) {
 
   switch (command) {
     case 'project':
-      // Run create_project.dart for project creation
       String projectPath = CreateProject();
       print("----------------------");
       print(projectPath);
@@ -31,10 +29,9 @@ void main(List<String> arguments) {
       break;
     case 'page':
       if (pageName != null) {
-        // Run create_page.dart with the specified page name
-        CreatePage([pageName]); // Pass page name as an argument
+        CreatePage([pageName]);
       } else {
-        print('Invalid command. Usage: dart main.dart page:<page_name>');
+        print('Invalid command. Usage: gen page:<page_name>');
       }
       break;
 
@@ -51,6 +48,6 @@ void main(List<String> arguments) {
       break;
 
     default:
-      print('Invalid command. Usage: dart main.dart <command>');
+      print('Invalid command. Usage: gen <command>');
   }
 }
