@@ -49,26 +49,26 @@ Gen_CLI is a command-line interface (CLI) tool for building Flutter and server a
 
 3. After that, you can use the `gen` command from anywhere in the system.
 
-## Usage
+
 ### Commands
 
 #### 1. `gen project <ProjectName>`
 Creates a new Flutter project with the specified name and sets up the project structure.
--`gen project MyProject`
+- `gen project MyProject`
 
 #### 2. `gen page <PageName>`
 Generates a new Flutter page with the specified name.
--`gen page Login`
+- `gen page Login`
 
 
 #### 3. `gen view <ViewName>:<PageName>`
 Generates a new view for a specific page in the Flutter project.
--`gen view ItemView:Login`
+- `gen view ItemView:Login`
 
 
 #### 4. `gen controller <ControllerName>:<PageName>`
 Generates a new controller for a specific page in the Flutter project.
--`gen view ItemController:Login`
+- `gen view ItemController:Login`
 
 
 #### 5. `gen model <ModelSource>`
