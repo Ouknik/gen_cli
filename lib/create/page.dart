@@ -92,15 +92,15 @@ import '../modules/$pageName/bindings/${pageName}_binding.dart';
   String appRoutesPath = '$projectPath/lib/app/routes/app_routes.dart';
   String appRoutesContent = File(appRoutesPath).readAsStringSync();
   appRoutesContent = appRoutesContent.replaceFirst('/*Routes*/', '''
-static const ${capitalize(pageName).toUpperCase()} = _Paths.${capitalize(pageName).toUpperCase()} 
-/*Routes*/}
+static const ${capitalize(pageName).toUpperCase()} = _Paths.${capitalize(pageName).toUpperCase()} ;
+/*Routes*/
 ''');
   createFile(appRoutesPath, appRoutesContent);
 
   String appPathContent = File(appRoutesPath).readAsStringSync();
 
-  appPathContent = appPathContent.replaceFirst('/*_Paths*/}', '''
-static const ${capitalize(pageName).toUpperCase()} = '/${capitalize(pageName).toLowerCase()}' 
+  appPathContent = appPathContent.replaceFirst('/*_Paths*/', '''
+static const ${capitalize(pageName).toUpperCase()} = '/${capitalize(pageName).toLowerCase()}' ;
 /*_Paths*/
 ''');
   createFile(appRoutesPath, appPathContent);
