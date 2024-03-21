@@ -1,4 +1,3 @@
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/connect.dart';
 import 'package:http/http.dart' as http;
@@ -59,14 +58,5 @@ class CallApi extends GetConnect {
     } else {
       return Statue().ProblemInternet;
     }
-  }
-
-  // Function to read the JSON file
-  loadCategories(String pathFile) async {
-    // Read the JSON file
-    String jsonString =
-        await rootBundle.loadString(Confige().basePath + pathFile);
-
-    return jsonString;
   }
 }

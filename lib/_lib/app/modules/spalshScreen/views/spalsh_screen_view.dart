@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:ouknik/app/constants/color.dart';
+import 'package:ouknik/app/constants/images.dart';
 
-import '../../../constants/images.dart';
-
-import '../../../constants/color.dart';
 import '../controllers/spalsh_screen_controller.dart';
 
 class SpalshScreenView extends GetView<SpalshScreenController> {

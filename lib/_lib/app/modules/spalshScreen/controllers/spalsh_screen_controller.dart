@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../routes/app_pages.dart';
+import 'package:ouknik/app/routes/app_pages.dart';
 
 class SpalshScreenController extends GetxController
     with SingleGetTickerProviderMixin {

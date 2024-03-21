@@ -11,10 +11,8 @@ class RootView extends GetView<RootController> {
   Widget build(BuildContext context) {
     return Obx(() {
       return Scaffold(
-        floatingActionButton: controller.currentFloatingButton,
-
-        floatingActionButtonLocation: controller.currentLocationFloatingButton,
-        floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+        //floatingActionButton: controller.currentFloatingButton,
+        // floatingActionButtonLocation: controller.currentLocationFloatingButton,
         appBar: AppBar(
           title: Text(
             "Project_name",
@@ -22,28 +20,25 @@ class RootView extends GetView<RootController> {
           centerTitle: true,
           elevation: 0.0,
         ),
-        // backgroundColor: AppColors.primaryColor,
+
+        backgroundColor: Colors.white,
         body: controller.currentPage,
         bottomNavigationBar: SizedBox(
-          height: 56.h,
+          height: 60.h,
           child: BottomAppBar(
-            color: AppColors.primaryColor,
-            shape: CircularNotchedRectangle(),
-            notchMargin: 5, //
-
+            shape: const CircularNotchedRectangle(),
+            notchMargin: 4, //
             child: BottomNavigationBar(
                 type: BottomNavigationBarType.fixed,
-                selectedFontSize: 0,
-                unselectedFontSize: 0,
-                iconSize: 30.sp,
+                selectedItemColor: Colors.white,
+
+                //  selectedLabelStyle: styleLableButtonNavigatorbar,
+                // unselectedLabelStyle: styleLableButtonNavigatorbar,
                 elevation: 0,
                 backgroundColor: AppColors.primaryColor,
-                selectedIconTheme:
-                    IconThemeData(size: 36.h, color: Colors.white),
-                unselectedItemColor: Colors.white38,
-                currentIndex: controller.currentIndex.value,
+                unselectedItemColor: Colors.white,
                 onTap: (int i) {
-                  controller.currentIndex.value = i;
+                  controller.changePageInRoot(i);
                 },
                 // this will be set when a new tab is tapped
                 items: controller.itemsNavigationButtom()),

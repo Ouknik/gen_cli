@@ -8,14 +8,6 @@ import '../modules/spalshScreen/bindings/spalsh_screen_binding.dart';
 import '../modules/spalshScreen/views/spalsh_screen_view.dart';
 
 //add-import
-import '../modules/carts/views/carts_view.dart';
-    
-import '../modules/carts/bindings/carts_binding.dart';
-
-import '../modules/login/views/login_view.dart';
-    
-import '../modules/login/bindings/login_binding.dart';
-
 
 part 'app_routes.dart';
 
@@ -40,17 +32,5 @@ class AppPages {
       page: () => const SpalshScreenView(),
       binding: SpalshScreenBinding(),
     ),
-      GetPage(
-      name: _Paths.LOGIN,
-      page: () => const LoginView(),
-      binding: LoginBinding(),
-    ),
-      GetPage(
-      name: _Paths.CARTS,
-      page: () => const CartsView(),
-      binding: CartsBinding(),
-    ),
   ];
-
-
 }

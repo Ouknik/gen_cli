@@ -1,3 +1,5 @@
 class Confige {
-  final String baseUrl = "http://localhost:9092";
+  final String baseUrl = "lib/app/data";
+
+  final String basePath = "lib/app/data";
 }
