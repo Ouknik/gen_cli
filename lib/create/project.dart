@@ -54,7 +54,7 @@ String CreateProject() {
 ''');
 
     PubspecYamlContent =
-        PubspecYamlContent.replaceFirst('  flutter_lints: ^2.0.0', '''
+        PubspecYamlContent.replaceFirst('flutter_lints: ^2.0.0', '''
   flutter_lints: ^2.0.0
 flutter_launcher_icons:
   android: "launcher_icon"

@@ -27,7 +27,10 @@ void getAllLibrary({required String projectPath}) {
     "shimmer",
     "flutter_screenutil",
     "http",
-    "flutter_launcher_icons"
+    "flutter_launcher_icons",
+    "connectivity_plus",
+    "hive",
+    "hive_flutter"
   ];
 
   print("..library..");
