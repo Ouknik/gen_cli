@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:test_gen/app/constants/color.dart';
-import 'package:test_gen/app/modules/carts/controllers/carts_controller.dart';
-import 'package:test_gen/app/modules/carts/views/carts_view.dart';
-import 'package:test_gen/app/modules/home/controllers/home_controller.dart';
+import '../../home/views/scan_qr_code_view.dart';
+import '/app/constants/color.dart';
+import '/app/modules/carts/controllers/carts_controller.dart';
+import '/app/modules/carts/views/carts_view.dart';
+import '/app/modules/home/controllers/home_controller.dart';
 
 import '../../../routes/app_pages.dart';
 import '../../home/views/home_view.dart';
@@ -69,7 +70,9 @@ class RootController extends GetxController {
               color: Colors.white,
             ),
             backgroundColor: Colors.pink,
-            onPressed: () {},
+            onPressed: () {
+              Get.to(Scan_qr_codeView());
+            },
           ),
         )),
     Container(

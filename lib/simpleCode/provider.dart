@@ -11,9 +11,9 @@ import '../../../func/call_api.dart';
 
 
 class ${capitalize(pageName)}Provider extends GetConnect {
-  Future<Annonce> get() async {
+   get() async {
     final response = await CallApi()
-        .callApiStreamWithOtt("/get", Statue().get, {});
+        .callApiStreamWithOtt("/get", Statue().GET, {});
 
     try {
       print(response);

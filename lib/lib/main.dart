@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
-import 'package:test_gen/app/model/products.dart';
+import '/app/model/products.dart';
 import 'app/constants/color.dart';
 import 'app/lang/transation.dart';
 import 'app/routes/app_pages.dart';

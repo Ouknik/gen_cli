@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import 'package:test_gen/app/model/category.dart';
-import 'package:test_gen/app/model/products.dart';
+import '/app/model/category.dart';
+import '/app/model/products.dart';
 
 import '../../../func/call_api.dart';
 

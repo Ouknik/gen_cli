@@ -49,6 +49,7 @@ String CreateProject() {
   assets:
     - lib/assets/images/
     - lib/assets/icons/
+    - lib/app/data/
  
 
 ''');

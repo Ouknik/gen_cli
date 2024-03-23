@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:yaml/yaml.dart';
 
+import 'library.dart';
+
 void createFolder(String path) {
   Directory directory = Directory(path);
   directory.createSync(recursive: true);
@@ -20,26 +22,30 @@ String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
 ///
 
 void getAllLibrary({required String projectPath}) {
-  // List of libraries to add
-  List<String> libraries = [
-    "get",
-    "cached_network_image",
-    "shimmer",
-    "flutter_screenutil",
-    "http",
-    "flutter_launcher_icons",
-    "connectivity_plus",
-    "hive",
-    "hive_flutter"
-  ];
-
   print("..library..");
   // Execute 'flutter pub add' command for each library
+
+/*
   libraries.forEach((library) {
     print("flutter pub add $library");
     Process.runSync('flutter', ['pub', 'add', library],
         workingDirectory: projectPath);
   });
+*/
+  // Add regular dependencies
+  libraries.forEach((library) {
+    print("flutter pub add $library");
+    Process.runSync('flutter', ['pub', 'add', library],
+        workingDirectory: projectPath);
+  });
+
+// Add dev dependencies
+  libraries_dev.forEach((library) {
+    print("dart pub add dev:$library");
+    Process.runSync('dart', ['pub', 'add', 'dev:$library'],
+        workingDirectory: projectPath);
+  });
+
   print(".........");
 }
 

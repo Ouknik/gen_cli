@@ -9,11 +9,19 @@ class CartsController extends GetxController {
     getCartProducts();
   }
 
+  final loading = false.obs;
+  final totalPrice = 0.0.obs;
   List<Products> cartProducts = [];
   void getCartProducts() {
+    loading.value = true;
     final box = Boxes.getCart();
     cartProducts = box.values.toList().cast<Products>();
-    print("total: " + cartProducts.length.toString());
+    totalPrice.value = 0.0;
+    cartProducts.forEach((product) {
+      totalPrice.value = totalPrice.value + product.prix;
+    });
+
+    loading.value = false;
     update();
   }
 
@@ -21,6 +29,8 @@ class CartsController extends GetxController {
     cartProducts[indexProducts].delete();
 
     cartProducts.removeAt(indexProducts);
+
+    getCartProducts();
     update();
   }
 }
