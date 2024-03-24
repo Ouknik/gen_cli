@@ -9,8 +9,13 @@ List<String> libraries = [
   "connectivity_plus",
   "hive",
   "hive_flutter",
-  "flutter_slidable"
+  "flutter_slidable",
+  "mobile_scanner: 3.5.5"
 ];
 
 // List of libraries-dev to add
-List<String> libraries_dev = ["hive_generator", "build_runner"];
+List<String> libraries_dev = [
+  "hive_generator",
+  "build_runner",
+  "flutter_launcher_icons"
+];

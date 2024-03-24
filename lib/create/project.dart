@@ -55,8 +55,8 @@ String CreateProject() {
 ''');
 
     PubspecYamlContent =
-        PubspecYamlContent.replaceFirst('flutter_lints: ^2.0.0', '''
-  flutter_lints: ^2.0.0
+        PubspecYamlContent.replaceFirst('dev_dependencies:', '''
+
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
@@ -74,7 +74,7 @@ flutter_launcher_icons:
   macos:
     generate: true
     image_path: "lib/assets/images/logo.png"
-flutter: 
+dev_dependencies:
 ''');
 
     createFile(existingPubspeDir, PubspecYamlContent);

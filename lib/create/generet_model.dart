@@ -30,7 +30,7 @@ class ModelGenerator {
     }
   }
 
-  static Future<dynamic> generateModelFromFile(
+  /*static Future<dynamic> generateModelFromFile(
       String filePath, String modelName) async {
     try {
       // Read the JSON file
@@ -47,8 +47,144 @@ class ModelGenerator {
       print('Error reading file: $e');
       return null;
     }
+  }*/
+
+  static Future<dynamic> generateModelFromFile(
+      String filePath, String modelName) async {
+    try {
+      // Read the JSON file
+      File file = File(filePath);
+      String contents = await file.readAsString();
+
+      // Parse the JSON data as a list of objects
+      List<dynamic> jsonDataList = json.decode(contents);
+
+      // Convert the list to a single JSON object
+      Map<String, dynamic> jsonData = {'data': jsonDataList};
+
+      // Generate the model from JSON
+      return generateModelFromJson(jsonData, modelName);
+    } catch (e) {
+      // An error occurred, return null
+      print('Error reading file: $e');
+      return null;
+    }
   }
 
+  static dynamic generateModelFromJson(
+      Map<String, dynamic> json, String modelName) {
+    if (json == null ||
+        json.isEmpty ||
+        modelName == null ||
+        modelName.isEmpty) {
+      return null;
+    }
+
+    // Start building the model class string
+    StringBuffer modelClass = StringBuffer('// To parse this JSON data, do\n');
+    modelClass.writeln('//\n'
+        '//     final $modelName = $modelName(jsonString);\n\n');
+
+    modelClass.writeln('import \'package:meta/meta.dart\';\n'
+        'import \'dart:convert\';\n\n');
+
+    modelClass.writeln('List<$modelName> $modelName(String str) => '
+        'List<$modelName>.from(json.decode(str).map((x) => $modelName.fromJson(x)));\n\n');
+
+    modelClass.writeln('String $modelName(List<$modelName> data) => '
+        'json.encode(List<dynamic>.from(data.map((x) => x.toJson())));\n\n');
+
+    modelClass.writeln('class $modelName {\n');
+
+    // Loop through the keys of the JSON object
+    Map<String, String> nestedModels = {};
+    Map<String, dynamic> modelFromJsonMap = {};
+    Map<String, dynamic> toJsonMap = {};
+
+    json.forEach((key, value) {
+      // Check the type of the value
+      if (value is Map<String, dynamic>) {
+        // If it's a nested object, recursively generate the model for it
+        String nestedModelName = '${_capitalize(key)}';
+        String nestedModelString =
+            generateModelFromJson(value, nestedModelName);
+
+        // Add the nested model to the class string
+        nestedModels[nestedModelName] = nestedModelString;
+
+        // Add the field to the main model class
+        modelClass.writeln('  $nestedModelName $key;');
+        modelFromJsonMap[key] = '$nestedModelName.fromJson(json[\'$key\'])';
+        toJsonMap[key] = '$key.toJson()';
+      } else if (value is List<dynamic>) {
+        // If it's a list, check if it contains nested objects
+        if (value.isNotEmpty && value.first is Map<String, dynamic>) {
+          // If the list contains nested objects, generate models for each item
+          String listModelName = '${_capitalize(key)}Item';
+          String listModelString =
+              generateModelFromJson(value.first, listModelName);
+
+          // Add the nested list model to the class string
+          nestedModels[listModelName] = listModelString;
+
+          // Add the field to the main model class
+          modelClass.writeln('  List<$listModelName> $key;');
+          modelFromJsonMap[key] =
+              'List<dynamic>.from(json[\'$key\'].map((x) => $listModelName.fromJson(x)))';
+          toJsonMap[key] = 'List<dynamic>.from($key.map((x) => x.toJson()))';
+        } else {
+          // Otherwise, keep the list as is
+          String listType = _getListType(value);
+          modelClass.writeln('  List<$listType> $key;');
+          modelFromJsonMap[key] = _getListParsingLogic(listType, key);
+          toJsonMap[key] = '$key';
+        }
+      } else {
+        // Otherwise, keep the value as is
+        modelClass.writeln('  ${_getType(value)} $key;');
+        modelFromJsonMap[key] = 'json[\'$key\']';
+        toJsonMap[key] = '$key';
+      }
+    });
+
+    // Constructor
+    modelClass.writeln('  $modelName({');
+    json.forEach((key, value) {
+      String type = _getType(value);
+      modelClass.writeln('    required this.$key,');
+    });
+    modelClass.writeln('  });\n');
+
+    // Close the class string
+    modelClass.writeln();
+
+    // Generate fromJson method
+    modelClass.writeln('  $modelName.fromJson(Map<String, dynamic> json) {');
+    modelFromJsonMap.forEach((key, value) {
+      modelClass.writeln('    $key = $value;');
+    });
+    modelClass.writeln('  }\n');
+
+    // Generate toJson method
+    modelClass.writeln('  Map<String, dynamic> toJson() => {');
+    toJsonMap.forEach((key, value) {
+      modelClass.writeln('    \'$key\': $value,');
+    });
+    modelClass.writeln('  };');
+
+    // Close the class string
+    modelClass.writeln('}\n');
+
+    // Add nested models to the final class string
+    nestedModels.forEach((name, definition) {
+      modelClass.write(definition);
+    });
+
+    // Return the generated model class string
+    return modelClass.toString();
+  }
+
+/*
   static dynamic generateModelFromJson(
       Map<String, dynamic> json, String modelName) {
     if (json == null ||
@@ -143,6 +279,7 @@ class ModelGenerator {
     return modelClass.toString();
   }
 
+*/
   // Helper function to capitalize the first letter of a string
   static String _capitalize(String s) => s[0].toUpperCase() + s.substring(1);
 
