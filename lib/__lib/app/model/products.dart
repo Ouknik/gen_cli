@@ -27,16 +27,15 @@ class Products extends HiveObject {
   double prix;
   @HiveField(5)
   int categoryId;
-  @HiveField(6)
-  String qrCode;
-  Products(
-      {required this.id,
-      required this.name,
-      required this.image,
-      required this.description,
-      required this.prix,
-      required this.categoryId,
-      required this.qrCode});
+
+  Products({
+    required this.id,
+    required this.name,
+    required this.image,
+    required this.description,
+    required this.prix,
+    required this.categoryId,
+  });
 
   factory Products.fromJson(Map<String, dynamic> json) => Products(
         id: json["id"],
@@ -45,7 +44,6 @@ class Products extends HiveObject {
         description: json["description"],
         prix: json["prix"].toDouble(),
         categoryId: json["category_id"],
-        qrCode: json["qr_code"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -55,6 +53,5 @@ class Products extends HiveObject {
         "description": description,
         "prix": prix,
         "category_id": categoryId,
-        "qr_code": qrCode,
       };
 }

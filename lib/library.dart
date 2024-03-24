@@ -10,7 +10,7 @@ List<String> libraries = [
   "hive",
   "hive_flutter",
   "flutter_slidable",
-  "mobile_scanner: 3.5.5"
+  "simple_barcode_scanner"
 ];
 
 // List of libraries-dev to add

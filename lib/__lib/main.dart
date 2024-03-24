@@ -13,22 +13,26 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(ProductsAdapter());
+
   await Hive.openBox<Products>('ProductsBox');
-  runApp(const MyApp());
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: const Size(360, 690),
+      designSize: Size(360, 690),
       minTextAdapt: true,
       splitScreenMode: true,
       // Use builder only if you need to use library outside ScreenUtilInit context
       builder: (_, child) => GetMaterialApp(
         debugShowCheckedModeBanner: false,
         // locale: controller.initializeLocale(),
+
         theme: ThemeData(
           appBarTheme: const AppBarTheme(
             elevation: 0,
@@ -38,6 +42,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
+
         translations: Translation(),
         title: "Application",
         initialRoute: AppPages.INITIAL,

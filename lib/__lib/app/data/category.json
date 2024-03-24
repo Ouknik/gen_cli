@@ -1,0 +1,44 @@
+[
+    {
+        "id":"1",
+        "name": "Cleaning materials",
+        "image": "https://images.allianceonline.co.uk/Categories/Cleaning-Chemicals3.jpg"
+    },
+    {
+        "id":"2",
+
+        "name": "Electronics",
+        "image": "https://dis-prod.assetful.loblaw.ca/content/dam/loblaw-companies-limited/creative-assets/shoppers-drug-mart/sdm-phx/digital/web/campaigns/2023/wk01/electronics/c-electronic-hero-slider-desktop-EN.png"
+    },
+    {
+        "id":"3",
+
+        "name": "Clothing",
+        "image": "https://images.squarespace-cdn.com/content/v1/608871dd0431b56d468fb16b/1645550536797-FBBVUP052XZFPDCKCH20/pexels-los-muertos-crew-8030179.jpg"
+    },
+    {
+        "id":"4",
+
+        "name": "Books",
+        "image": "https://cdn2.vectorstock.com/i/1000x1000/29/06/school-books-vector-42906.jpg"
+    },
+    {
+        "id":"5",
+
+        "name": "Groceries",
+        "image": "https://www.bucuti.com/storage/app/uploads/public/5f5/fe2/981/thumb_2322_1920_1080_0_0_crop.jpeg"
+    },
+    {
+        "id":"6",
+
+        "name": "Home decor",
+        "image": "https://img.freepik.com/premium-photo/interior-design-scandinavian-living-room-with-stylish-grey-sofa-coffee-table-tropical-plant-mirror-decoration-pillows-plaid-elegant-personal-accessories-modern-home-decor_431307-2710.jpg"
+    },
+    {
+        "id":"7",
+
+        "name": "Toys & Games",
+        "image": "https://www.inventorsdigest.com/wp-content/uploads/2019/12/Iconic-Patented-Toys.jpg"
+    }
+  
+]

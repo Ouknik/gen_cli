@@ -2,7 +2,7 @@ import '/app/modules/carts/controllers/carts_controller.dart';
 import 'package:get/get.dart';
 import '../../../model/products.dart';
 import '../../..//modules/home/providers/home_provider.dart';
-//import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import '../../../box.dart';
 import '../../../model/category.dart';
 
@@ -56,22 +56,12 @@ class HomeController extends GetxController {
     c.getCartProducts();
   }
 
-  addToCartByQrCode({required String qrCode}) {
-    _products.forEach((element) {
-      print(element.qrCode + "==" + qrCode);
-      if (element.qrCode == qrCode) {
-        addToCart(products: element);
-      }
-    });
-    Get.back();
-  }
-
   //Scanner qr code
-/*
+
   MobileScannerController mobileScannerController = MobileScannerController(
     detectionSpeed: DetectionSpeed.noDuplicates,
     facing: CameraFacing.back,
   );
 
-  final is_scanner = false.obs;*/
+  final is_scanner = false.obs;
 }

@@ -7,7 +7,7 @@ import '/app/constants/color.dart';
 import '/app/modules/carts/controllers/carts_controller.dart';
 import '/app/modules/carts/views/carts_view.dart';
 import '/app/modules/home/controllers/home_controller.dart';
-import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
+
 import '../../../routes/app_pages.dart';
 import '../../home/views/home_view.dart';
 
@@ -70,14 +70,8 @@ class RootController extends GetxController {
               color: Colors.white,
             ),
             backgroundColor: Colors.pink,
-            onPressed: () async {
-              var res = await Navigator.push(
-                  Get.context!,
-                  MaterialPageRoute(
-                    builder: (context) => const SimpleBarcodeScannerPage(),
-                  ));
-              final contr = Get.put(HomeController());
-              contr.addToCartByQrCode(qrCode: res);
+            onPressed: () {
+              Get.to(Scan_qr_codeView());
             },
           ),
         )),

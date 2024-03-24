@@ -5,8 +5,7 @@
         "image": "https://cdn02.plentymarkets.com/4n91gk7bomyj/item/images/124581774/full/IMG-20181208-141604.jpg",
         "description": "Description of Quran El karim",
         "prix": 12.00,
-        "category_id": 1,
-        "qr_code": "hdhjn1,hbgh dbsnj,hbjuniquedjk njhnljk"
+        "category_id": 1
     },
     {
         "id": 2,
@@ -14,8 +13,7 @@
         "image": "https://images.allianceonline.co.uk/Categories/Cleaning-Chemicals3.jpg",
         "description": "Description of Cleaning materials",
         "prix": 10.50,
-        "category_id": 2,
-        "qr_code": "hdhjn2,hbgh dbsnj,hbjuniquedjk njhnljk"
+        "category_id": 2
     },
     {
         "id": 3,
@@ -23,8 +21,7 @@
         "image": "https://images.allianceonline.co.uk/Categories/Cleaning-Chemicals3.jpg",
         "description": "Description of Electronics",
         "prix": 150.00,
-        "category_id": 3,
-        "qr_code": "hdhjn3,hbgh dbsnj,hbjuniquedjk njhnljk"
+        "category_id": 3
     },
     {
         "id": 4,
@@ -32,8 +29,7 @@
         "image": "https://images.squarespace-cdn.com/content/v1/608871dd0431b56d468fb16b/1645550536797-FBBVUP052XZFPDCKCH20/pexels-los-muertos-crew-8030179.jpg",
         "description": "Description of Clothing",
         "prix": 45.99,
-        "category_id": 4,
-        "qr_code": "hdhjn4,hbgh dbsnj,hbjuniquedjk njhnljk"
+        "category_id": 4
     },
     {
         "id": 5,
@@ -41,8 +37,7 @@
         "image": "https://cdn2.vectorstock.com/i/1000x1000/29/06/school-books-vector-42906.jpg",
         "description": "Description of Books",
         "prix": 20.00,
-        "category_id": 5,
-        "qr_code": "hdhjn5,hbgh dbsnj,hbjuniquedjk njhnljk"
+        "category_id": 5
     },
     {
         "id": 6,
@@ -50,8 +45,7 @@
         "image": "https://www.bucuti.com/storage/app/uploads/public/5f5/fe2/981/thumb_2322_1920_1080_0_0_crop.jpeg",
         "description": "Description of Groceries",
         "prix": 30.00,
-        "category_id": 6,
-        "qr_code": "hdhjn6,hbgh dbsnj,hbjuniquedjk njhnljk"
+        "category_id": 6
     },
     {
         "id": 7,
@@ -59,8 +53,7 @@
         "image": "https://img.freepik.com/premium-photo/interior-design-scandinavian-living-room-with-stylish-grey-sofa-coffee-table-tropical-plant-mirror-decoration-pillows-plaid-elegant-personal-accessories-modern-home-decor_431307-2710.jpg",
         "description": "Description of Home decor",
         "prix": 55.75,
-        "category_id": 7,
-        "qr_code": "hdhjn7,hbgh dbsnj,hbjuniquedjk njhnljk"
+        "category_id": 7
     },
     {
         "id": 8,
@@ -68,7 +61,7 @@
         "image": "https://www.inventorsdigest.com/wp-content/uploads/2019/12/Iconic-Patented-Toys.jpg",
         "description": "Description of Toys & Games",
         "prix": 40.00,
-        "category_id": 8,
-        "qr_code": "hdhjn8,hbgh dbsnj,hbjuniquedjk njhnljk"
+        "category_id": 8
     }
+   
 ]
