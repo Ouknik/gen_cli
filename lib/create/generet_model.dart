@@ -81,18 +81,7 @@ class ModelGenerator {
     }
 
     // Start building the model class string
-    StringBuffer modelClass = StringBuffer('// To parse this JSON data, do\n');
-    modelClass.writeln('//\n'
-        '//     final $modelName = $modelName(jsonString);\n\n');
-
-    modelClass.writeln('import \'package:meta/meta.dart\';\n'
-        'import \'dart:convert\';\n\n');
-
-    modelClass.writeln('List<$modelName> $modelName(String str) => '
-        'List<$modelName>.from(json.decode(str).map((x) => $modelName.fromJson(x)));\n\n');
-
-    modelClass.writeln('String $modelName(List<$modelName> data) => '
-        'json.encode(List<dynamic>.from(data.map((x) => x.toJson())));\n\n');
+    StringBuffer modelClass = StringBuffer('');
 
     modelClass.writeln('class $modelName {\n');
 
@@ -339,12 +328,13 @@ Future<void> CreateModel(List<String> arguments) async {
   String? modelName = stdin.readLineSync();
 
   if (typeCommande == "url") {
-    var model = await ModelGenerator.generateModelFromUrl(url, modelName!);
+    var model =
+        await ModelGenerator.generateModelFromUrl(url, capitalize(modelName!));
 
     createFile('$projectPath/lib/app/model/$modelName.dart', model);
   } else if (typeCommande == "file") {
     var model = await ModelGenerator.generateModelFromFile(
-        projectPath + "/lib/app/data/" + url, modelName!);
+        projectPath + "/lib/app/data/" + url, capitalize(modelName!));
 
     createFile('$projectPath/lib/app/model/$modelName.dart', model);
   }
